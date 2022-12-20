@@ -8,7 +8,7 @@ export {
   const dayNames = ["Sun", "Mon", "Tue", "Wed", "Thu","Fri", "Sat"];
   
   function getDateInStrFormat(date){
-    var strformatted = dayNames[date.getDay()]+", "+
+    var strformatted = [date.getDay()]+", "+
                        date.getDate()+" "+
                        monthNames[date.getMonth()]+" "+
                        date.getFullYear()+", "+
