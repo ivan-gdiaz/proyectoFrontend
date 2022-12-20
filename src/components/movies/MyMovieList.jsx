@@ -52,7 +52,7 @@ export default function MyMovieList(){
               {bookmarks.map((bookmark) => {
                 return (
                   <Row className="justify-content-center">
-                    <Col xs="10">
+                    <Col xs="12">
                       <div className="card" style={{ backgroundColor: 'black' }}>
                         <div className="card-body">
                           <Row>
