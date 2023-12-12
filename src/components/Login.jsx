@@ -12,7 +12,12 @@ import {
   Media,
 } from "reactstrap";
 
-import { GoogleLogin } from "react-google-login";
+import { jwtDecode } from "jwt-decode";
+
+
+import { GoogleLogin } from '@react-oauth/google';
+import { GoogleOAuthProvider } from '@react-oauth/google';
+
 import config from "../config.js";
 
 import MyImgLogin from "../images/background_mernflixdark.png";
@@ -25,26 +30,20 @@ var imgStyle = {
 export default function Login() {
   const [loginMessage, setLoginMessage] = useState(null);
 
+
   const navigate = useNavigate();
 
   const onSuccess = (res) => {
     ////////////////////////Lo que debería contener onSucess////////////////////////
-    console.log("[Login Success] currentUser:", res.profileObj);
-    sessionStorage.setItem('name', res.profileObj.getName());
-    sessionStorage.setItem('email', res.profileObj.getEmail());
+    var email=jwtDecode(res.credential).email;
+    var name=jwtDecode(res.credential).name;
+    sessionStorage.setItem('email', email);
+    sessionStorage.setItem('name', name);
     navigate("/home");
   };
 
-  const onFailure = (res) => {
-    ///////////Modificación para acceder a /home a pesar de fallar la autenticación OAuth/////////////
-    sessionStorage.setItem('name', 'Iván González');
-    sessionStorage.setItem('email', 'ivan.gzdiaz@gmail.com');
-    navigate("/home");
-
-    ////////////////////////Lo que debería contener onFailure////////////////////////
-    console.log("[Login Failed] res:", res);
-    // setLoginMessage(<Alert color="danger">Wrong login access. Try again</Alert>);
-
+  const onError = () => {
+    console.log("[Login Failed]");
   };
 
   return (
@@ -60,15 +59,14 @@ export default function Login() {
             <CardTitle tag="h5">Welcome to MERNFlix</CardTitle>
             <CardText>React-based web project"</CardText>
             <CardText>
+            <GoogleOAuthProvider clientId={config.clientID}>
               <GoogleLogin
-                clientId={config.clientID}
-                buttonText="Login"
-                theme="dark"
-                onSuccess={onSuccess}
-                onFailure={onFailure}
-                cookiePolicy={"single_host_origin"}
-                isSignedIn={true}
+                  auto_select
+                  onSuccess={onSuccess}
+                  onError={onError}
+                  useOneTap
               />
+            </GoogleOAuthProvider>
               {loginMessage}
             </CardText>
             <Media style={imgStyle} object src={MyImgLogin} alt="Login" />

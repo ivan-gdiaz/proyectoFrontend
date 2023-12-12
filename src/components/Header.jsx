@@ -1,9 +1,9 @@
 import React from 'react';
+import { googleLogout } from '@react-oauth/google';
 import { Link, useNavigate } from 'react-router-dom';
 
 import { Collapse, Navbar, NavbarBrand, Nav, NavItem, NavLink, NavbarText } from 'reactstrap';
 
-import { GoogleLogout } from 'react-google-login';
 import config from '../config.js';
 
 export default function Header(){
@@ -11,11 +11,12 @@ export default function Header(){
   const navigate = useNavigate();
 
   const onLogout = () => {
+    googleLogout();
     sessionStorage.clear();
     navigate("/");
   }
 
-  if (sessionStorage.getItem("name") !== null){
+  if (sessionStorage.getItem("email") !== null){
 
     return (
       <Navbar light color="danger" expand="md">
@@ -31,13 +32,8 @@ export default function Header(){
           </Nav>
           <NavbarText>
             <span className="text-white">{sessionStorage.getItem('name')} </span>
-            <GoogleLogout
-              clientId={config.clientID}
-              //clientId="1066717874249-gtt7keup7vdo58dfq8817j93fb60d7p0.apps.googleusercontent.com"
-              buttonText="Logout"
-              theme='dark'
-              onLogoutSuccess={onLogout}
-            />
+            <button class="btn btn-dark" onClick={onLogout}>Logout</button>
+
           </NavbarText>
         </Collapse>
       </Navbar>
