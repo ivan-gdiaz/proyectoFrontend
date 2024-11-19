@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import {
@@ -30,8 +30,15 @@ var imgStyle = {
 export default function Login() {
   const [loginMessage, setLoginMessage] = useState(null);
 
-
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const email = sessionStorage.getItem('email');
+    if (email) {
+      navigate("/home");
+    }
+  }, null);
+
 
   const onSuccess = (res) => {
     ////////////////////////Lo que debería contener onSucess////////////////////////
